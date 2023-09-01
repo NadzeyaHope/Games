@@ -1,11 +1,11 @@
 import Item from './Item';
 import classes from './Header.module.css';
-import Search from "@/components/Header/Search";
-import iconSignIn from 'components/icons/user.png';
-import iconWishlist from 'components/icons/🔹Icon Color.png';
-import Menu from "@/components/Header/Menu";
-import Logo from "@/components/Header/Logo";
-import logotype from 'components/icons/Group.png'
+import Search from "@/temp/Header/Search";
+import iconSignIn from '@/temp/icons/user.png';
+import iconWishlist from '@/temp/icons/\uD83D\uDD39Icon Color.png';
+import Menu from "@/temp/Header/Menu";
+import Logo from "@/temp/Header/Logo";
+import logotype from '@/temp/icons/Group.png'
 const Header = () => {
     return (
         <div className={classes.header}>
