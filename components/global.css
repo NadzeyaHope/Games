@@ -1,0 +1,19 @@
+body {
+    font-family: Mulish, sans-serif;
+    font-style: normal;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg-accent-color: #237943;
+    --text-accent-color: #fff;
+    --shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    --radius: 8px;
+    --border-input : 1px solid #E3E1E1;
+    --input-height : 51px;
+}

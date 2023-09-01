@@ -1,0 +1,8 @@
+.searchInput {
+    height: 48px;
+    width: 532px;
+    border : none;
+    background-color: #f2f2f2;
+    border: var(--border-input);
+    border: none;
+}

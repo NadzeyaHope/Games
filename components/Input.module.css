@@ -1,0 +1,17 @@
+.label {
+    color: #11142D;
+    height: 19px;
+    margin-bottom: 16px;
+    font-weight: 560;
+}
+.inputItem {
+    width: 100%;
+}
+.input {
+    height: var(--input-height);
+    border-radius: var(--radius);
+    border : var(--border-input);
+}
+.fullWidth {
+    width: 100%;
+}
