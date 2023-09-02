@@ -1,0 +1,11 @@
+.root {
+    height: var(--input-height);
+    border-radius: var(--radius);
+    border : var(--border-input);
+    outline: none;
+    width: 300px;
+}
+
+.root:focus {
+    border : var(--border-input-focus);
+}
