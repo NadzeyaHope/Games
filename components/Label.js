@@ -1,11 +1,12 @@
 import React from 'react';
+import classes from './Label.module.css';
 
 const Label = (props) => {
   const {children} = props
   return (
-    <label>
+    <div className={classes.root}>
       {children}
-    </label>
+    </div>
   );
 };
 
