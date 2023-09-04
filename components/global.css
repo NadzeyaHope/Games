@@ -10,6 +10,8 @@ body {
 }
 
 :root {
+    --text-color: #29292E;
+    --bg: #fff;
     --bg-accent-color: #237943;
     --text-accent-color: #fff;
     --shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);

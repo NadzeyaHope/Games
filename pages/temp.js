@@ -1,5 +1,5 @@
-import Button from '@/components/Button';
-import Input from '@/components/Input';
+import Button from '@/components/form/Button';
+import Input from '@/components/form/Input';
 import Header from '@/temp/Header/Header';
 import {useState} from 'react';
 
