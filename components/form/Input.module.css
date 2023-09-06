@@ -3,6 +3,8 @@
     border-radius: var(--radius);
     border : var(--border-input);
     outline: none;
+    font-size: 18px;
+    padding: 0 12px;
 }
 
 .root:focus {

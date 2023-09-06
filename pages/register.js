@@ -1,9 +1,7 @@
 import RegisterContainer from "@/sections/register/RegisterContainer";
 const RegisterPage = () => {
     return (
-        <div>
-            <RegisterContainer/>
-        </div>
+      <RegisterContainer/>
     )
 };
 export default RegisterPage;

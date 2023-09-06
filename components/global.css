@@ -11,6 +11,7 @@ body {
 
 :root {
     --text-color: #29292E;
+    --text-color-error: #f1244d;
     --bg: #fff;
     --bg-accent-color: #237943;
     --text-accent-color: #fff;
