@@ -3,8 +3,14 @@
 import {mongoDb} from "@/lib/mongoDb";
 
 export default async function handler(req, res) {
+    const {userId} = req.cookies;
+    if (!userId) {
+        res.status(401).json('You do not have permissions');
+        return
+    }
+
     const db = await mongoDb();
-    const users = await db.collection('goals');
-    const result = await users.find().toArray();
+    const goals = await db.collection('goals');
+    const result = await goals.find({userId}).toArray();
     res.status(200).json(result);
 }

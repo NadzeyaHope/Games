@@ -3,12 +3,16 @@
 import {mongoDb} from "@/lib/mongoDb";
 
 export default async function handler(req, res) {
+    const {userId} = req.cookies;
+    if (!userId) {
+        res.status(401).json('You do not have permissions');
+        return
+    }
+
     const db = await mongoDb();
     const users = await db.collection('goals');
     const data = JSON.parse(req.body);
-    const result = await users.insertOne(data);
-    // const userId = result.insertedId.toString();
-    // res.setHeader('Set-Cookie', [`userId=${userId}; HttpOnly; Path=/`])
+    const result = await users.insertOne({...data, userId});
 
     res.status(201).json(result);
 }

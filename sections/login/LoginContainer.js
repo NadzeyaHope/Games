@@ -7,11 +7,15 @@ import Spacer from "@/components/layout/Spacer";
 import Header from "@/components/typography/Header";
 import TextInput from '@/components/form/TextInput';
 import Error from "@/components/form/Error";
+import {useRouter} from 'next/router';
 
 const LoginContainer = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({})
+
+    const router = useRouter();
+
     const onChangeEmail = (e) => {
         return setEmail(e)
     }
@@ -37,8 +41,7 @@ const LoginContainer = () => {
             method: 'POST',
             body: JSON.stringify({email, password})
         });
-        const json = await response.json();
-        if(json === 403){
+        if(!response.ok){
             setErrors({
                 ...errors,
                 message : 'your email or password is wrong'
@@ -48,7 +51,8 @@ const LoginContainer = () => {
         setEmail('');
         setPassword('');
         setErrors({})
-        return console.log(json)
+
+        return router.push('/dashboard/goals');
     }
     return (
         <div className={classes.root}>
