@@ -38,7 +38,28 @@ const RegisterContainer = () => {
       })
       return;
     }
-    const response = await fetch('/api/goals/create', {
+    if(email.length === 0){
+      setErrors({
+        ...errors,
+        email: 'You are not enter the email'
+      })
+      return;
+    }
+    if(password.length === 0){
+      setErrors({
+        ...errors,
+        password : 'You are not enter the password'
+      })
+      return;
+    }
+    if(password.length <= 7){
+      setErrors({
+        ...errors,
+        password : 'The password need to consist more than 7 elements'
+      })
+      return;
+    }
+    const response = await fetch('/api/users/register', {
       method: 'POST',
       body: JSON.stringify({email, fullName, password})
     })
@@ -46,6 +67,7 @@ const RegisterContainer = () => {
     setPassword('');
     setFullName('');
     setConfirmPassword('');
+    setErrors('')
   }
   return (
     <div className={classes.root}>
@@ -57,7 +79,7 @@ const RegisterContainer = () => {
         isRequired
         value={email}
         onChange={onChangeEmail}
-        error={'jhkhjkhkjhkj'}
+        error={errors.email}
         fullWidth
       />
 
@@ -74,26 +96,19 @@ const RegisterContainer = () => {
         label={'Password'}
         isRequired
         value={password}
+        error={errors.password}
         onChange={onChangePassword}
         fullWidth
       />
 
-
-
-      <Label>Full Name</Label>
-      <Spacer value={10}/>
-      <Input value={fullName} onChange={onChangeName} fullWidth/>
-      <Spacer value={20}/>
-      <Label>Password</Label>
-      <Spacer value={10}/>
-      <Input value={password} onChange={onChangePassword} fullWidth/>
-      <Spacer value={20}/>
-      <Label>Confirm password</Label>
-      <Spacer value={10}/>
-      <Input value={confirmPassword} fullWidth onChange={onChangeConfirmPassword}/>
-      <Spacer value={4}/>
-      <Error>{errors.confirmPassword}</Error>
-      <Spacer value={22}/>
+        <TextInput
+            label={'Confirm password'}
+            isRequired
+            value={confirmPassword}
+            onChange={onChangeConfirmPassword}
+            fullWidth
+            error={errors.confirmPassword}
+        />
       <Button onClick={onSend} fullWidth>Create an account</Button>
     </div>
   );

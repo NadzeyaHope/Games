@@ -1,28 +1,37 @@
 import React, {useEffect, useState} from "react";
 import TextInput from "@/components/form/TextInput";
+import classes from './InputGoals.module.css';
+import Button from "@/components/form/Button";
+import Header from "@/components/typography/Header";
+import Spacer from "@/components/layout/Spacer";
+import png from './png/be0c2bdad605ff797d5249614efecbe6.jpg';
 
 const InputGoals = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [list, setList] = useState([]);
+    const [image, setImage] = useState(png)
+    // const [list, setList] = useState([]);
     const [errors, setErrors] = useState({})
 
-    const refresh = async () => {
-        const response = await fetch('/api/goals/list');
-        const json = await response.json();
-        setList(json);
-    }
+    // const refresh = async () => {
+    //     const response = await fetch('/api/goals/list');
+    //     const json = await response.json();
+    //     setList(json);
+    // }
 
-    const inputChange = (e) => {
-        return setTitle(e.target.value)
+    const titleChange = (e) => {
+        return setTitle(e)
     }
     const descriptionChange = (e) => {
-        return setDescription(e.target.value)
+        return setDescription(e)
     }
-
-    useEffect(()=>{
-        refresh();
-    }, [])
+    const imageChange = (e) =>{
+        return setImage(e)
+    }
+    //
+    // useEffect(()=>{
+    //     refresh();
+    // }, [])
 
     const onSend = async () => {
         if(title === ''){
@@ -32,19 +41,30 @@ const InputGoals = () => {
             })
             return ;
         }
+        if(description === ''){
+            setErrors({
+                ...errors,
+                description : 'You are did not write the description '
+            })
+            return ;
+        }
         const response = await fetch('/api/goals/create', {
             method : 'POST',
-            body : JSON.stringify({name, description})
+            body : JSON.stringify({title, description, image})
         })
-        setDescription('')
+        setDescription('');
         setTitle('');
-        refresh();
+        setImage('');
     }
 
     return (
-        <div>
-            <TextInput fullWidth onChange={inputChange} error={errors.titleGoal} value={title} label={'Title your goal'} isRequired />
-            <TextInput fullWidth onChange={inputChange} error={errors.titleGoal} value={title} label={'Title your goal'} isRequired />
+        <div className={classes.root}>
+            <Header>Add your goal</Header>
+            <Spacer value={40} />
+            <TextInput fullWidth onChange={titleChange} error={errors.titleGoal} value={title} label={'Title your goal'} isRequired />
+            <TextInput fullWidth onChange={descriptionChange} error={errors.description} value={description} label={'Description your goal'} isRequired />
+            {/*<TextInput fullWidth onChange={imageChange} value={image} label={'Image your goal'} isRequired={false} />*/}
+            <Button onClick={onSend} fullWidth>Add Goal</Button>
         </div>
     )
 }

@@ -1,0 +1,9 @@
+.root {
+    display: flex;
+    justify-content: space-around;
+}
+.element {
+    border-radius: 10px;
+    padding : 20px;
+    border: 1px #E3E1E1 solid;
+}
