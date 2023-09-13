@@ -41,6 +41,12 @@ const InputGoals = () => {
             })
             return ;
         }
+        if(title.length >= 22){
+            setErrors({
+                ...errors,
+                titleGoal : 'You cant to enter more 22 elements'
+            })
+        }
         if(description === ''){
             setErrors({
                 ...errors,

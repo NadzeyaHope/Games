@@ -8,6 +8,7 @@ import {useState} from 'react';
 import Header from '@/components/typography/Header';
 import Error from '@/components/form/Error';
 import TextInput from '@/components/form/TextInput';
+import {useRouter} from 'next/router';
 
 const RegisterContainer = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ const RegisterContainer = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [dataRegister, setDataRegister] = useState([]);
-
+  const router = useRouter();
   const [errors, setErrors] = useState({});
 
   const onChangeEmail = (e) => {
@@ -67,7 +68,8 @@ const RegisterContainer = () => {
     setPassword('');
     setFullName('');
     setConfirmPassword('');
-    setErrors('')
+    setErrors('');
+    return router.push('/dashboard/goals');
   }
   return (
     <div className={classes.root}>
