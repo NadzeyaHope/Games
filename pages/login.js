@@ -1,10 +1,11 @@
 import LoginContainer from './../sections/login/LoginContainer'
+
 const LoginPage = () => {
-    return (
-        <div>
-            <LoginContainer/>
-        </div>
-    )
+  return (
+    <>
+      <LoginContainer/>
+    </>
+  )
 }
 
 export default LoginPage;
