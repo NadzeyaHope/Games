@@ -9,29 +9,44 @@ import Header from '@/components/typography/Header';
 import Error from '@/components/form/Error';
 import TextInput from '@/components/form/TextInput';
 import {useRouter} from 'next/router';
+import CircleSpinner from '@/components/loaders/CircleSpinner';
 
 const RegisterContainer = () => {
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [dataRegister, setDataRegister] = useState([]);
   const router = useRouter();
   const [errors, setErrors] = useState({});
+  const [Loading, setLoading] = useState(false);
+
+  function isValidEmail(email) {
+    return /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email);
+  }
 
   const onChangeEmail = (e) => {
+    setErrors({})
     return setEmail(e)
   }
   const onChangeName = (e) => {
+    setErrors({})
     return setFullName(e)
   }
   const onChangePassword = (e) => {
+    setErrors({})
     return setPassword(e)
   }
   const onChangeConfirmPassword = (e) => {
+    setErrors({})
     return setConfirmPassword(e)
   }
   const onSend = async () => {
+    if(!isValidEmail(email)){
+      setErrors({
+        ...errors, email : 'You are enter not valid email'
+      })
+      return
+    }
     if (password !== confirmPassword) {
       setErrors({
         ...errors,
@@ -53,17 +68,12 @@ const RegisterContainer = () => {
       })
       return;
     }
-    if(password.length <= 7){
-      setErrors({
-        ...errors,
-        password : 'The password need to consist more than 7 elements'
-      })
-      return;
-    }
+    setLoading(true);
     const response = await fetch('/api/users/register', {
       method: 'POST',
       body: JSON.stringify({email, fullName, password})
     })
+    setLoading(false);
     setEmail('')
     setPassword('');
     setFullName('');
@@ -111,7 +121,9 @@ const RegisterContainer = () => {
             fullWidth
             error={errors.confirmPassword}
         />
-      <Button onClick={onSend} fullWidth>Create an account</Button>
+      <Button onClick={onSend} fullWidth>
+        {Loading ? (<CircleSpinner diameter={32} />) : 'Create an account'}
+      </Button>
     </div>
   );
 };

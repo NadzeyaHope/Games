@@ -16,16 +16,29 @@ const LoginContainer = () => {
 
     const router = useRouter();
 
+
+    function isValidEmail(email) {
+        return /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email);
+    }
     const onChangeEmail = (e) => {
-        return setEmail(e)
+        setEmail(e)
+        setErrors({})
     }
 
     const onChangePassword = (e) => {
+        setErrors({})
         return setPassword(e)
     }
 
     const refresh = async () => {
-        if(email.length === 0){
+        if(!isValidEmail(email)){
+            setErrors({
+                ...errors,
+                email : 'You are enter not valid email'
+            })
+            return ;
+        }
+         if(email.length === 0){
             setErrors({
                 ...errors,
                 email : 'You are not enter the email'
