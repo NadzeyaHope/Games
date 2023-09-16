@@ -7,85 +7,104 @@ import TextInput from '@/components/form/TextInput';
 import Error from '@/components/form/Error';
 import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
+import {isEmail, validate, validateValues} from '@/lib/validation';
+import {isRequired} from '@/lib/validation';
+
+const validations = {
+  email: [
+    {validator: isRequired, errorMessage: 'Please enter email'},
+    {validator: isEmail, errorMessage: 'Please enter correct Email'},
+  ],
+  password: [
+    {validator: isRequired, errorMessage: 'Please enter Password'},
+  ],
+  name: [
+    {validator: isRequired, errorMessage: 'Please enter Name'},
+  ],
+}
 
 const LoginContainer = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState({})
-    const [isLoading, setIsLoading] = useState(false)
+  const [values, setValues] = useState({
+    email: '',
+    password: '',
+    name: ''
+  });
 
-    const router = useRouter();
+  const [errors, setErrors] = useState({})
+  const [isLoading, setIsLoading] = useState(false);
 
 
-    function isValidEmail(email) {
-        return /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email);
-    }
-    const onChangeEmail = (e) => {
-        setEmail(e)
-        setErrors({})
-    }
+  const router = useRouter();
 
-    const onChangePassword = (e) => {
-        setErrors({})
-        return setPassword(e)
-    }
+  const onChange = (name) => (value) => {
+    setValues({...values, [name]: value});
+  }
 
-    const refresh = async () => {
-        if(!isValidEmail(email)){
-            setErrors({
-                ...errors,
-                email : 'You are enter not valid email'
-            })
-            return ;
-        }
-         if(email.length === 0){
-            setErrors({
-                ...errors,
-                email : 'You are not enter the email'
-            })
-            return ;
-        }
-        if(password.length === 0){
-            setErrors({
-                ...errors,
-                password : 'You are not enter the password'
-            })
-            return ;
-        }
+  const onSubmit = async () => {
+    const validationErrors = validateValues(validations, values);
 
-        setIsLoading(true);
-        const response = await fetch('/api/users/login', {
-            method: 'POST',
-            body: JSON.stringify({email, password})
-        });
-        setIsLoading(false);
-
-        if(!response.ok){
-            setErrors({
-                ...errors,
-                message : 'your email or password is wrong'
-            })
-            return;
-        }
-        setEmail('');
-        setPassword('');
-        setErrors({})
-
-        return router.push('/dashboard/goals');
+    setErrors(validationErrors)
+    if (Object.keys(validationErrors).length > 0) {
+      return;
     }
 
-    return (
-        <div className={classes.root}>
-            <Header>Login</Header>
-            <Spacer value={40}/>
-            <TextInput error={errors.email} fullWidth onChange={onChangeEmail} value={email} placeholder={email} label={'Email'} isRequired/>
-            <TextInput error={errors.password} fullWidth onChange={onChangePassword} value={password} placeholder={password} label={'Password'} isRequired/>
-            <Button onClick={refresh} fullWidth>
-                {isLoading ? (<CircleSpinner diameter={32} />) : 'Login'}
-            </Button>
-            <Error>{errors.message}</Error>
-        </div>
-    );
+    setIsLoading(true);
+    const response = await fetch('/api/users/login', {
+      method: 'POST',
+      body: JSON.stringify(values)
+    });
+    setIsLoading(false);
+
+    if (!response.ok) {
+      setErrors({message: 'your email or password is wrong'})
+      return;
+    }
+
+    setEmail('');
+    setPassword('');
+    setErrors({})
+
+    return router.push('/dashboard/goals');
+  }
+
+  return (
+    <div className={classes.root}>
+      <Header>Login</Header>
+      <Spacer value={40}/>
+      <TextInput
+        error={errors.email}
+        fullWidth
+        onChange={onChange('email')}
+        value={values.email}
+        placeholder={'Enter Email'}
+        label={'Email'}
+        isRequired
+      />
+      <TextInput
+        error={errors.password}
+        onChange={onChange('password')}
+        value={values.password}
+        placeholder={'Enter password'}
+        label={'Password'}
+        type={'password'}
+        isRequired
+        fullWidth
+      />
+      <TextInput
+        error={errors.name}
+        onChange={onChange('name')}
+        value={values.name}
+        placeholder={'Enter name'}
+        label={'name'}
+        isRequired
+        fullWidth
+      />
+      <Button onClick={onSubmit} fullWidth>
+        {isLoading ? (<CircleSpinner diameter={32}/>) : 'Login'}
+      </Button>
+      <Error>{errors.message}</Error>
+    </div>
+  );
 };
 
 export default LoginContainer;

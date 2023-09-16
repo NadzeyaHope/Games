@@ -6,7 +6,7 @@ import Error from '@/components/form/Error';
 import Label from '@/components/form/Label';
 
 const TextInput = (props) => {
-  const {error, fullWidth, isRequired, label, onChange, placeholder, value} = props;
+  const {error, fullWidth, isRequired, label, onChange, placeholder, value, ...rest} = props;
 
   return (
     <>
@@ -17,6 +17,7 @@ const TextInput = (props) => {
         onChange={onChange}
         value={value}
         placeholder={placeholder}
+        {...rest}
       />
       <Spacer value={4}/>
       <Error>{error}</Error>
@@ -32,7 +33,7 @@ TextInput.propTypes = {
   value: PropTypes.string,
   label: PropTypes.string,
   isRequired: PropTypes.bool,
-    error : PropTypes.string
+  error : PropTypes.string
 };
 
 export default TextInput;
