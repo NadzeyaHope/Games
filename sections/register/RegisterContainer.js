@@ -1,131 +1,123 @@
-import React from 'react';
-import Input from '@/components/form/Input';
-import Label from '@/components/form/Label';
+import React, {useState} from 'react';
+import classes from './RegisterContainer.module.css';
 import Button from '@/components/form/Button';
 import Spacer from '@/components/layout/Spacer';
-import classes from './RegisterContainer.module.css';
-import {useState} from 'react';
 import Header from '@/components/typography/Header';
-import Error from '@/components/form/Error';
 import TextInput from '@/components/form/TextInput';
+import Error from '@/components/form/Error';
 import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
+import {isEmail, validate, validateValues} from '@/lib/validation';
+import {isRequired} from '@/lib/validation';
+
+const validations = {
+    email: [
+        {validator: isRequired, errorMessage: 'Please enter email'},
+        {validator: isEmail, errorMessage: 'Please enter correct Email'},
+    ],
+    userName: [
+        {validator: isRequired, errorMessage: 'Please enter Name'},
+    ],
+    password: [
+        {validator: isRequired, errorMessage: 'Please enter Password'},
+    ],
+    confirmPassword: [
+        {validator: isRequired, errorMessage: 'Please enter Confirm password'},
+    ],
+}
 
 const RegisterContainer = () => {
-  const [email, setEmail] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const router = useRouter();
-  const [errors, setErrors] = useState({});
-  const [Loading, setLoading] = useState(false);
+    const [values, setValues] = useState({
+        email: '',
+        userName: '',
+        password: '',
+        confirmPassword: '',
+    });
 
-  function isValidEmail(email) {
-    return /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email);
-  }
+    const [errors, setErrors] = useState({})
+    const [isLoading, setIsLoading] = useState(false);
 
-  const onChangeEmail = (e) => {
-    setErrors({})
-    return setEmail(e)
-  }
-  const onChangeName = (e) => {
-    setErrors({})
-    return setFullName(e)
-  }
-  const onChangePassword = (e) => {
-    setErrors({})
-    return setPassword(e)
-  }
-  const onChangeConfirmPassword = (e) => {
-    setErrors({})
-    return setConfirmPassword(e)
-  }
-  const onSend = async () => {
-    if(!isValidEmail(email)){
-      setErrors({
-        ...errors, email : 'You are enter not valid email'
-      })
-      return
+
+    const router = useRouter();
+
+    const onChange = (name) => (value) => {
+        setValues({...values, [name]: value});
     }
-    if (password !== confirmPassword) {
-      setErrors({
-        ...errors,
-        confirmPassword: 'Confirm password is not equal to password'
-      })
-      return;
+
+    const onSubmit = async () => {
+        const validationErrors = validateValues(validations, values);
+
+        setErrors(validationErrors)
+        if (Object.keys(validationErrors).length > 0) {
+            return;
+        }
+
+        setIsLoading(true);
+        if(values.password !== values.confirmPassword){
+             setErrors({...errors, confirmPassword: 'The  confirm password is wrong'})
+            return
+        }
+        const response = await fetch('/api/users/register', {
+            method: 'POST',
+            body: JSON.stringify(values)
+        });
+        setIsLoading(false);
+
+
+        setErrors({})
+
+        return router.push('/dashboard/goals');
     }
-    if(email.length === 0){
-      setErrors({
-        ...errors,
-        email: 'You are not enter the email'
-      })
-      return;
-    }
-    if(password.length === 0){
-      setErrors({
-        ...errors,
-        password : 'You are not enter the password'
-      })
-      return;
-    }
-    setLoading(true);
-    const response = await fetch('/api/users/register', {
-      method: 'POST',
-      body: JSON.stringify({email, fullName, password})
-    })
-    setLoading(false);
-    setEmail('')
-    setPassword('');
-    setFullName('');
-    setConfirmPassword('');
-    setErrors('');
-    return router.push('/dashboard/goals');
-  }
-  return (
-    <div className={classes.root}>
-      <Header>Registration</Header>
-      <Spacer value={40}/>
 
-      <TextInput
-        label={'Email'}
-        isRequired
-        value={email}
-        onChange={onChangeEmail}
-        error={errors.email}
-        fullWidth
-      />
-
-      <TextInput
-        label={'Full Name'}
-        isRequired
-        value={fullName}
-        onChange={onChangeName}
-        error={''}
-        fullWidth
-      />
-
-      <TextInput
-        label={'Password'}
-        isRequired
-        value={password}
-        error={errors.password}
-        onChange={onChangePassword}
-        fullWidth
-      />
-
-        <TextInput
-            label={'Confirm password'}
-            isRequired
-            value={confirmPassword}
-            onChange={onChangeConfirmPassword}
-            fullWidth
-            error={errors.confirmPassword}
-        />
-      <Button onClick={onSend} fullWidth>
-        {Loading ? (<CircleSpinner diameter={32} />) : 'Create an account'}
-      </Button>
-    </div>
-  );
+    return (
+        <div className={classes.root}>
+            <Header>Registration</Header>
+            <Spacer value={40}/>
+            <TextInput
+                error={errors.email}
+                fullWidth
+                onChange={onChange('email')}
+                value={values.email}
+                placeholder={'Enter Email'}
+                label={'Email'}
+                isRequired
+            />
+            <TextInput
+                error={errors.userName}
+                onChange={onChange('userName')}
+                value={values.userName}
+                placeholder={'Enter name'}
+                label={'User name'}
+                isRequired
+                fullWidth
+            />
+            <TextInput
+                error={errors.password}
+                onChange={onChange('password')}
+                value={values.password}
+                placeholder={'Enter password'}
+                label={'Password'}
+                type={'password'}
+                isRequired
+                fullWidth
+            />
+            <TextInput
+                error={errors.confirmPassword}
+                onChange={onChange('confirmPassword')}
+                value={values.confirmPassword}
+                placeholder={'Enter confirm password'}
+                label={'Confirm password'}
+                type={'password'}
+                isRequired
+                fullWidth
+            />
+            <Button onClick={onSubmit} fullWidth>
+                {isLoading ? (<CircleSpinner diameter={32}/>) : 'Create an account'}
+            </Button>
+            <Error>{errors.message}</Error>
+        </div>
+    );
 };
+
 
 export default RegisterContainer;

@@ -55,13 +55,7 @@ const LoginContainer = () => {
     });
     setIsLoading(false);
 
-    if (!response.ok) {
-      setErrors({message: 'your email or password is wrong'})
-      return;
-    }
 
-    setEmail('');
-    setPassword('');
     setErrors({})
 
     return router.push('/dashboard/goals');
