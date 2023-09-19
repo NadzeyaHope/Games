@@ -1,0 +1,23 @@
+.header {
+    border-bottom: 1px solid gray;
+    padding: 40px 0}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+}
+.h1 {
+    color: #181818;
+    font-size: 24px;
+    text-transform: uppercase;
+    font-weight: 800;
+}
+
+.p {
+    color: #7b7b7b;
+}

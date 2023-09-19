@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     const user = await users.findOne({email : data.email, password : data.password});
 
     if(user === null){
-        res.status(403).json(403)
+        res.status(403).json('the email not found')
         return;
     }
 

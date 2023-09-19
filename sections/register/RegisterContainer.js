@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
 import {isEmail, validate, validateValues} from '@/lib/validation';
 import {isRequired} from '@/lib/validation';
+import {createRequest} from './../../lib/request';
 
 const validations = {
     email: [
@@ -20,10 +21,7 @@ const validations = {
     ],
     password: [
         {validator: isRequired, errorMessage: 'Please enter Password'},
-    ],
-    confirmPassword: [
-        {validator: isRequired, errorMessage: 'Please enter Confirm password'},
-    ],
+    ]
 }
 
 const RegisterContainer = () => {
@@ -31,8 +29,12 @@ const RegisterContainer = () => {
         email: '',
         userName: '',
         password: '',
-        confirmPassword: '',
     });
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const onChangeConfirmPassword = (e) => {
+        setConfirmPassword(e);
+    }
 
     const [errors, setErrors] = useState({})
     const [isLoading, setIsLoading] = useState(false);
@@ -46,26 +48,18 @@ const RegisterContainer = () => {
 
     const onSubmit = async () => {
         const validationErrors = validateValues(validations, values);
-
         setErrors(validationErrors)
         if (Object.keys(validationErrors).length > 0) {
             return;
         }
-
-        setIsLoading(true);
-        if(values.password !== values.confirmPassword){
-             setErrors({...errors, confirmPassword: 'The  confirm password is wrong'})
+        if(values.password !== confirmPassword){
+            setErrors({...errors, confirmPassword: 'The  confirm password is wrong'})
             return
         }
-        const response = await fetch('/api/users/register', {
-            method: 'POST',
-            body: JSON.stringify(values)
-        });
+        setIsLoading(true);
+        const response = await createRequest(values, '/api/users/register');
         setIsLoading(false);
-
-
         setErrors({})
-
         return router.push('/dashboard/goals');
     }
 
@@ -103,8 +97,8 @@ const RegisterContainer = () => {
             />
             <TextInput
                 error={errors.confirmPassword}
-                onChange={onChange('confirmPassword')}
-                value={values.confirmPassword}
+                onChange={onChangeConfirmPassword}
+                value={confirmPassword}
                 placeholder={'Enter confirm password'}
                 label={'Confirm password'}
                 type={'password'}

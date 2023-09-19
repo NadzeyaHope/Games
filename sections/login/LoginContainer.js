@@ -9,6 +9,7 @@ import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
 import {isEmail, validate, validateValues} from '@/lib/validation';
 import {isRequired} from '@/lib/validation';
+import {createRequest} from "@/lib/request";
 
 const validations = {
   email: [
@@ -18,16 +19,12 @@ const validations = {
   password: [
     {validator: isRequired, errorMessage: 'Please enter Password'},
   ],
-  name: [
-    {validator: isRequired, errorMessage: 'Please enter Name'},
-  ],
 }
 
 const LoginContainer = () => {
   const [values, setValues] = useState({
     email: '',
     password: '',
-    name: ''
   });
 
   const [errors, setErrors] = useState({})
@@ -47,18 +44,11 @@ const LoginContainer = () => {
     if (Object.keys(validationErrors).length > 0) {
       return;
     }
-
     setIsLoading(true);
-    const response = await fetch('/api/users/login', {
-      method: 'POST',
-      body: JSON.stringify(values)
-    });
-    setIsLoading(false);
-
-
-    setErrors({})
-
-    return router.push('/dashboard/goals');
+    const res = await createRequest(values, '/api/users/login');
+      setIsLoading(false);
+      setErrors({})
+      return router.push('/dashboard/goals');
   }
 
   return (
@@ -81,15 +71,6 @@ const LoginContainer = () => {
         placeholder={'Enter password'}
         label={'Password'}
         type={'password'}
-        isRequired
-        fullWidth
-      />
-      <TextInput
-        error={errors.name}
-        onChange={onChange('name')}
-        value={values.name}
-        placeholder={'Enter name'}
-        label={'name'}
         isRequired
         fullWidth
       />
