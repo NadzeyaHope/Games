@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import classes from './LoginContainer.module.css';
 import Button from '@/components/form/Button';
 import Spacer from '@/components/layout/Spacer';
@@ -7,9 +7,9 @@ import TextInput from '@/components/form/TextInput';
 import Error from '@/components/form/Error';
 import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
-import {isEmail, validate, validateValues} from '@/lib/validation';
-import {isRequired} from '@/lib/validation';
-import {post} from './../../lib/http';
+import {isEmail, isRequired} from '@/lib/validation';
+import useForm from '@/hooks/useForm';
+import api from '@/api';
 
 const validations = {
   email: [
@@ -22,34 +22,30 @@ const validations = {
 }
 
 const LoginContainer = () => {
-  const [values, setValues] = useState({
-    email: '',
-    password: '',
-  });
-
-  const [errors, setErrors] = useState({})
-  const [isLoading, setIsLoading] = useState(false);
-
 
   const router = useRouter();
 
-  const onChange = (name) => (value) => {
-    setValues({...values, [name]: value});
+  const onValidate = () => {
+    return api.users.login(values);
   }
 
-  const onSubmit = async () => {
-    const validationErrors = validateValues(validations, values);
+  const onSuccess = () => {
+    return router.push('/dashboard/goals');
+  }
 
-    setErrors(validationErrors)
-    if (Object.keys(validationErrors).length > 0) {
-      return;
+  const {
+    onChange,
+    onSubmit,
+    isLoading,
+    errors,
+    values
+  } = useForm({
+    validations, onValidate, onSuccess, initialValues: {
+      email: '',
+      password: '',
     }
-    setIsLoading(true);
-      const response = await post( 'api/users/login', values);
-      setIsLoading(false);
-      setErrors({})
-      return router.push('/dashboard/goals');
-  }
+  });
+
 
   return (
     <div className={classes.root}>
