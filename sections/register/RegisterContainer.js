@@ -9,7 +9,8 @@ import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
 import {isEmail, validate, validateValues} from '@/lib/validation';
 import {isRequired} from '@/lib/validation';
-import {createRequest} from './../../lib/request';
+import {post} from '../../lib/http';
+import {register} from "@/api/users";
 
 const validations = {
     email: [
@@ -57,7 +58,7 @@ const RegisterContainer = () => {
             return
         }
         setIsLoading(true);
-        const response = await createRequest(values, '/api/users/register');
+        const response = await post( 'api/users/register', values);
         setIsLoading(false);
         setErrors({})
         return router.push('/dashboard/goals');

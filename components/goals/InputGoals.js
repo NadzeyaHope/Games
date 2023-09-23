@@ -5,8 +5,9 @@ import Button from "@/components/form/Button";
 import Header from "@/components/typography/Header";
 import Spacer from "@/components/layout/Spacer";
 import png from './png/be0c2bdad605ff797d5249614efecbe6.jpg';
-
+import CircleSpinner from "@/components/loaders/CircleSpinner";
 const InputGoals = () => {
+    const [load, setLoad] = useState(false);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(png)
@@ -54,10 +55,12 @@ const InputGoals = () => {
             })
             return ;
         }
+        setLoad(!load);
         const response = await fetch('/api/goals/create', {
             method : 'POST',
             body : JSON.stringify({title, description, image})
         })
+        setLoad(!load);
         setDescription('');
         setTitle('');
         setImage('');
@@ -70,7 +73,7 @@ const InputGoals = () => {
             <TextInput fullWidth onChange={titleChange} error={errors.titleGoal} value={title} label={'Title your goal'} isRequired />
             <TextInput fullWidth onChange={descriptionChange} error={errors.description} value={description} label={'Description your goal'} isRequired />
             {/*<TextInput fullWidth onChange={imageChange} value={image} label={'Image your goal'} isRequired={false} />*/}
-            <Button onClick={onSend} fullWidth>Add Goal</Button>
+            <Button onClick={onSend} fullWidth>{load ? (<CircleSpinner diameter={32}/>) : 'Add goal'}</Button>
         </div>
     )
 }

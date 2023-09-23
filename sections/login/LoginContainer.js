@@ -9,7 +9,7 @@ import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
 import {isEmail, validate, validateValues} from '@/lib/validation';
 import {isRequired} from '@/lib/validation';
-import {createRequest} from "@/lib/request";
+import {post} from './../../lib/http';
 
 const validations = {
   email: [
@@ -45,7 +45,7 @@ const LoginContainer = () => {
       return;
     }
     setIsLoading(true);
-    const res = await createRequest(values, '/api/users/login');
+      const response = await post( 'api/users/login', values);
       setIsLoading(false);
       setErrors({})
       return router.push('/dashboard/goals');

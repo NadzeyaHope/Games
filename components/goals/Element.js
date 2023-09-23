@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import ImageFone from "@/components/goals/Element/ImageFone";
-import TitleElement from "@/components/goals/Element/TitleElement";
-import Description from "@/components/goals/Element/Description";
+import ImageFone from "@/components/goals/ItemGoal/ImageFone";
+import TitleElement from "@/components/goals/ItemGoal/TitleElement";
+import Description from "@/components/goals/ItemGoal/Description";
 import image from './png/be0c2bdad605ff797d5249614efecbe6.jpg';
 import classes from './Element.module.css';
 
 const Element = (props) => {
+    const [load, setLoad] = useState(false);
     const [list, setList] = useState([]);
     const pageSize = 5;
     let currentPage = 0;
