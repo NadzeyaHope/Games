@@ -1,28 +1,14 @@
-import Button from '@/components/form/Button';
-import Input from '@/components/form/Input';
-import Header from '@/temp/Header/Header';
-import {useState} from 'react';
+import React from 'react';
+import Circles from '@/components/temp/Circles';
+import Squires from '@/components/temp/Squires';
 
 const Temp = () => {
-  const [value, setValue] = useState('')
-
-  const onChange = (newValue) => {
-    setValue(newValue)
-  }
-
   return (
-    <div style={{padding: 20}}>
-      <Button onClick={() => alert(value)} fullWidth>
-        Show me value
-      </Button>
-      <Button onClick={() => setValue('')} fullWidth>
-        Clear value
-      </Button>
-      <br/><br/>
-      <Input nameLabel={'Last Name'} fullWidth onChange={onChange} value={value}/>
-      <Header/>
+    <div>
+      <Circles />
+      <Squires />
     </div>
-  )
+  );
 };
 
 export default Temp;
