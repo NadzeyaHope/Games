@@ -9,8 +9,8 @@ import {useRouter} from 'next/router';
 import CircleSpinner from '@/components/loaders/CircleSpinner';
 import {isEmail, validate, validateValues} from '@/lib/validation';
 import {isRequired} from '@/lib/validation';
-import {post} from '../../lib/http';
-import {register} from "@/api/users";
+import api from '@/api';
+import useForm from "@/hooks/useForm";
 
 const validations = {
     email: [
@@ -26,43 +26,35 @@ const validations = {
 }
 
 const RegisterContainer = () => {
-    const [values, setValues] = useState({
-        email: '',
-        userName: '',
-        password: '',
-    });
+    const router = useRouter();
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [errorConfirmPassword, setErrorConfirmPassword] = useState('');
+    let errorConfirm = '';
+
 
     const onChangeConfirmPassword = (e) => {
         setConfirmPassword(e);
     }
 
-    const [errors, setErrors] = useState({})
-    const [isLoading, setIsLoading] = useState(false);
-
-
-    const router = useRouter();
-
-    const onChange = (name) => (value) => {
-        setValues({...values, [name]: value});
+    const onValidate = () => {
+        return api.users.register(values);
     }
-
-    const onSubmit = async () => {
-        const validationErrors = validateValues(validations, values);
-        setErrors(validationErrors)
-        if (Object.keys(validationErrors).length > 0) {
-            return;
-        }
-        if(values.password !== confirmPassword){
-            setErrors({...errors, confirmPassword: 'The  confirm password is wrong'})
-            return
-        }
-        setIsLoading(true);
-        const response = await post( 'api/users/register', values);
-        setIsLoading(false);
-        setErrors({})
+    const onSuccess = () => {
         return router.push('/dashboard/goals');
     }
+    const {
+        onChange,
+        onSubmit,
+        isLoading,
+        errors,
+        values,
+    } = useForm({
+        validations, onValidate, onSuccess, initialValues: {
+            email: '',
+            userName: '',
+            password: '',
+        }
+    });
 
     return (
         <div className={classes.root}>
@@ -97,7 +89,7 @@ const RegisterContainer = () => {
                 fullWidth
             />
             <TextInput
-                error={errors.confirmPassword}
+                error={errorConfirm}
                 onChange={onChangeConfirmPassword}
                 value={confirmPassword}
                 placeholder={'Enter confirm password'}
