@@ -1,9 +1,21 @@
 import {useState} from 'react';
 import {validateValues} from '@/lib/validation';
+import {z} from 'zod';
+const User = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+
 
 const useForm = (params) => {
   const {validations, onSuccess, onError, onValidate, initialValues} = params;
   const [values, setValues] = useState(initialValues);
+  const invalid = {
+    email : initialValues.email,
+    password : initialValues.password
+  }
+
+  const Userparse = User.parse(invalid);
 
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false);
