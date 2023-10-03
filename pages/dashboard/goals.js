@@ -1,12 +1,12 @@
 import React from 'react';
-import CreateGoals from "@/sections/goals/CreateGoals";
-import Menu from "@/components/nav/menu/Menu";
+import GoalsContainer from "@/sections/goals/GoalsContainer";
+import Sidebar from "@/components/nav/Sidebar/Sidebar";
 
-const Goals = () => {
+const Goals = (props) => {
+    const {children} = props;
     return (
         <div>
-            <Menu/>
-            <CreateGoals/>
+            <Sidebar/>Ц
         </div>
     );
 };

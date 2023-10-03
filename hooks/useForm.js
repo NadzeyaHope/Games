@@ -1,21 +1,11 @@
 import {useState} from 'react';
 import {validateValues} from '@/lib/validation';
-import {z} from 'zod';
-const User = z.object({
-  email: z.string(),
-  password: z.string(),
-});
-
 
 const useForm = (params) => {
-  const {validations, onSuccess, onError, onValidate, initialValues} = params;
+  const {validations, onSuccess, onError, onValidate, initialValues, confirmPassword} = params;
   const [values, setValues] = useState(initialValues);
-  const invalid = {
-    email : initialValues.email,
-    password : initialValues.password
-  }
+  const [errorConfirmPassword, setErrorConfirmPassword] = useState('');
 
-  const Userparse = User.parse(invalid);
 
   const [errors, setErrors] = useState({})
   const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +15,14 @@ const useForm = (params) => {
   }
 
   const onSubmit = async () => {
+    if(confirmPassword){
+      if(values.password !== confirmPassword){
+        setErrorConfirmPassword('The password not equal confirmPassword');
+        return;
+      }
+    }
+
+
     const validationErrors = validateValues(validations, values);
 
     setErrors(validationErrors)
@@ -52,7 +50,8 @@ const useForm = (params) => {
     setIsLoading,
     isLoading,
     onChange,
-    onSubmit
+    onSubmit,
+    errorConfirmPassword
   };
 }
 
