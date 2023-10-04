@@ -40,6 +40,7 @@ const useForm = (params) => {
       }
       return;
     }
+    setValues({})
     onSuccess(response)
   }
 
@@ -51,7 +52,7 @@ const useForm = (params) => {
     isLoading,
     onChange,
     onSubmit,
-    errorConfirmPassword
+    errorConfirmPassword,
   };
 }
 

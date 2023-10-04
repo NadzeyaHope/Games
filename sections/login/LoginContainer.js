@@ -30,7 +30,7 @@ const LoginContainer = () => {
   }
 
   const onSuccess = () => {
-    return router.push('/dashboard/goals');
+    return router.push('/dashboard');
   }
 
 
