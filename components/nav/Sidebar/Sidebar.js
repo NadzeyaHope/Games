@@ -2,28 +2,24 @@ import React, {useEffect, useState} from 'react';
 import Link from "next/link";
 import classes from './Sidebar.module.css';
 import IconLeftMenu from "@/components/nav/Sidebar/icon/IconLeftMenu";
-import GoalsContainer from "@/sections/goals/GoalsContainer";
-import AboutContainer from "@/sections/about/AboutContainer";
-import SettingsContainer from "@/sections/settings/SettingsContainer";
 import GoalsIcon from "@/components/nav/Sidebar/icon/GoalsIcon";
 import SettingsIcon from "@/components/nav/Sidebar/icon/SettingsIcon";
 import AboutUsIcon from "@/components/nav/Sidebar/icon/AboutUsIcon";
-import SignInIcon from "@/components/nav/signIn/SignInIcon";
 
 const list = [
     {
         name: 'Goals',
-        path : <GoalsContainer/>,
+        path : '/dashboard/goals',
         icon: <GoalsIcon/>
     },
     {
         name: 'About',
-        path : <AboutContainer/>,
+        path : '/dashboard/about',
         icon: <AboutUsIcon/>
     },
     {
         name : 'Settings',
-        path : <SettingsContainer/>,
+        path : '/dashboard/settings',
         icon: <SettingsIcon/>
     }
 ]
@@ -35,9 +31,6 @@ const Sidebar = () => {
     const toggle = () => {
         setIsOpen(!isOpen)
     }
-    const onAddPage = (path) => {
-        setChildren(path);
-    }
     return (
         <div className={classes.root}>
             <div style={{width: isOpen ? '250px' : '60px'}} className={classes.container}>
@@ -48,10 +41,10 @@ const Sidebar = () => {
                 {list.map((el)=>{
                     return (
                         <div>
-                            <div className={classes.elements} onClick={()=>{onAddPage(el.path) }} >
+                            <Link className={classes.elements} href={el.path}>
                                 <div className={classes.logo}>{el.icon}</div>
                                 <div className={classes.list}>{el.name}</div>
-                            </div>
+                            </Link>
                         </div>
                     )
                 })}

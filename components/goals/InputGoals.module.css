@@ -6,7 +6,6 @@
     box-shadow: var(--shadow);
 }
 .close {
-
     padding: 0;
     display: flex;
     justify-content: end;

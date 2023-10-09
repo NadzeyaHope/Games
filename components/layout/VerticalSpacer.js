@@ -5,7 +5,7 @@ const VerticalSpacer = (props) => {
     const {value} = props;
 
     return (
-        <div style={{marginLeft: value}} />
+        <div style={{marginRight: value}} />
     );
 };
 

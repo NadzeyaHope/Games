@@ -37,7 +37,7 @@ const RegisterContainer = () => {
     }
 
     const onSuccess = () => {
-        return router.push('/dashboard');
+        return router.push('/dashboard/goals');
     }
 
 

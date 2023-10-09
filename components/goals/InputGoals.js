@@ -9,6 +9,7 @@ import CloseIcon from "@/components/goals/png/CloseIcon";
 import {isRequired} from "@/lib/validation";
 import useForm from "@/hooks/useForm";
 import api from "@/api";
+import {useRouter} from 'next/router';
 
 
 const validations = {
@@ -21,14 +22,15 @@ const validations = {
 }
 
 const CreateGoals = (props) => {
+    const route = useRouter();
     const {onOpenCloseWindow, add} = props;
-    const [list, setList] = useState([]);
 
     const onValidate = async () => {
         return api.goals.createGoal(values);
     };
 
     const onSuccess = () => {
+        route.reload();
     }
 
 

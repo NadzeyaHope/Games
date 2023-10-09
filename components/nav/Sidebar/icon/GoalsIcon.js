@@ -1,5 +1,4 @@
 import React from 'react';
-import IconGoal from "@/components/nav/menuLogo/IconGoal";
 
 const GoalsIcon = (props) => {
     const {width = 35} = props;
