@@ -3,7 +3,7 @@ import GoalsContainer from "@/sections/goals/GoalsContainer";
 
 const Goals = () => {
     return (
-           <GoalsContainer/>
+                <GoalsContainer/>
     );
 };
 

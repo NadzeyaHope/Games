@@ -5,9 +5,9 @@ import classes from './Error.module.css';
 const Error = (props) => {
   const {children} = props;
   return (
-    <div className={classes.root}>
-      {children}
-    </div>
+      <div className={classes.root}>
+        {children}
+      </div>
   );
 };
 
